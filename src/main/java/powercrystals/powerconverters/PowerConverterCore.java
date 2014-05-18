@@ -44,7 +44,7 @@ public final class PowerConverterCore
 {
     public static final String modId = "PowerConverters";
     public static final String modName = "Power Converters";
-    public static String version = "1.2.1";
+    public static String version = "1.2.2";
 
     static 
     {
