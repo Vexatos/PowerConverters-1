@@ -1,0 +1,107 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+    }
+}
+
+apply plugin: 'forge' // adds the forge dependency
+
+// grab buildNumber
+ext.buildnumber = 0 // this will be referenced as simply project.buildnumber from now on.
+
+if (System.getenv().BUILD_NUMBER)
+    project.buildnumber = System.getenv().BUILD_NUMBER
+else
+    logger.lifecycle "SETTING BUILDNUMBER TO 0"
+
+version = "1.2.1_alpha"
+group= "com.powerconverters"
+archivesBaseName = "powerconverters" // the name that all artifacts will use as a base. artifacts names follow this pattern: [baseName]-[appendix]-[version]-[classifier].[extension]
+
+minecraft {
+    version = "1.7.2-10.12.1.1060"    
+
+    //assetDir = "run/assets" // the place for ForgeGradle to download the assets. The assets that the launcher gets and stuff
+
+    // replacing stuff in the source
+    //replace '@VERSION@', project.version
+    //replace '@MC_VERSION@', version
+    //replace '@BUILD_NUMBER@', project.buildnumber
+}
+
+configurations {
+    compile.extendsFrom exportedCompile
+}
+
+dependencies {
+    compile files('libs/ejml-0.24.jar')
+    compile files('libs/industrialcraft-2-2.1.477-experimental-dev.jar')
+    exportedCompile 'com.mod-buildcraft:buildcraft:6.0.15:api'
+}
+
+// configure  the source folders
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+        }
+        resources {
+            srcDir 'resources'        
+        }
+    }
+}
+
+processResources
+{
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+                
+        // replace version and mcversion
+        // ${version}   and    ${mcversion}    are the exact strings being replaced
+        expand 'version':project.version, 'mcversion':project.minecraft.version, 'buildnumber':project.buildnumber
+    }
+        
+    // copy everything else, that's not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+// --------------------
+// extra jar section
+// -------------------
+
+// for the benefit of the jars, we will now now add the buildnumber to the jars
+project.version += '.' + project.buildnumber
+
+// add a source jar
+task sourceJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+// because the normal output has been made to be obfuscated
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    from { configurations.exportedCompile.collect { it.isDirectory() ? it : zipTree(it) } }
+    classifier = 'dev'
+}
+
+jar {
+    from { configurations.exportedCompile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+
+// make sure all of these happen when we run build
+build.dependsOn sourceJar, deobfJar

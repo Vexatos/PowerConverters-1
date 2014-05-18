@@ -1,0 +1,8 @@
+/bin
+/build
+/download
+/.settings/org.eclipse.jdt.core.prefs
+/.gradle
+/eclipse
+/eclipseBin
+/.classpath

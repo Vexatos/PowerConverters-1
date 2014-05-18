@@ -1,0 +1,24 @@
+[
+{
+  "modid": "PowerConverters",
+  "name": "Power Converters",
+  "description": "Take control of your power",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "www.minecraftforum.net/topic/2655850-alpha172forge-powerconverters-v121-rf-eu-mj-steam/",
+  "updateUrl": "",
+  "authors": [
+    "PowerCrystals",
+    "samrg472",
+    "portablejim",
+    "dark-skript"	
+  ],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [
+  ],
+  "parent":"",
+  "dependencies": [
+  ]
+}
+]
