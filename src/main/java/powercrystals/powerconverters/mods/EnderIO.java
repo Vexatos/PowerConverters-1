@@ -1,5 +1,6 @@
 package powercrystals.powerconverters.mods;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -49,17 +50,8 @@ public final class EnderIO extends LoaderBase
     	
     	try
     	{
-    		if (EnderIO.INSTANCE.powerSystem.getRecipesEnabled())
-    		{
-    			GameRegistry.addShapelessRecipe(new ItemStack(converterBlock, 1, 1), new Object[] { new ItemStack(converterBlock, 1, 0) });
-    			GameRegistry.addShapelessRecipe(new ItemStack(converterBlock, 1, 0), new Object[] { new ItemStack(converterBlock, 1, 1) });
-		
-    			if (PowerConverterCore.powerSystemSteamEnabled)
-    			{
-    				GameRegistry.addRecipe(new ItemStack(converterBlock, 1, 0), new Object[] { "G G", " T ", "G G", Character.valueOf('G'), Items.gold_ingot, Character.valueOf('T'),  GameRegistry.findItemStack( "EnderIO", "blockCapacitorBank", 1 )});
-    			}
-	    		}
-			} 
+	    	GameRegistry.addRecipe(new ItemStack(converterBlock, 1, 0), new Object[] { "G G", " T ", "G G", Character.valueOf('G'), Items.gold_ingot, Character.valueOf('T'),  GameRegistry.findItemStack( "EnderIO", "blockCapacitorBank", 1 )});
+		} 
 	
 		catch (Throwable t)
 		{
